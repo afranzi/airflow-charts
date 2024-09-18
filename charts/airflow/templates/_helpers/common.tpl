@@ -89,11 +89,15 @@ http
 The path containing DAG files
 */}}
 {{- define "airflow.dags.path" -}}
-{{- if .Values.dags.gitSync.enabled -}}
-{{- printf "%s/repo/%s" (.Values.dags.path | trimSuffix "/") (.Values.dags.gitSync.repoSubPath | trimAll "/") -}}
-{{- else -}}
-{{- printf .Values.dags.path -}}
-{{- end -}}
+  {{- if .Values.dags.gitSync.enabled -}}
+    {{- if .Values.dags.gitSync.repoSubPath -}}
+      {{- printf "%s/repo/%s" (.Values.dags.path | trimSuffix "/") (.Values.dags.gitSync.repoSubPath | trimAll "/") -}}
+    {{- else -}}
+      {{- printf "%s/repo" (.Values.dags.path | trimSuffix "/") -}}
+    {{- end -}}
+  {{- else -}}
+    {{- printf "%s" (.Values.dags.path | trimSuffix "/") -}}
+  {{- end -}}
 {{- end -}}
 
 {{/*
